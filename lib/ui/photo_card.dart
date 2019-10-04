@@ -82,19 +82,12 @@ class _PhotoCardState extends State<PhotoCard> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 10.0, left: 10.0, bottom: 10.0, right: 5.0),
-              child: Text(
-                'SaulDesigns',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
+                padding: const EdgeInsets.only(
+                    top: 10.0, left: 10.0, bottom: 10.0, right: 5.0),
                 child: Text(
-                  widget.comment,
+                  "SaulDesigns  " + widget.comment,
                   softWrap: true,
                   style: TextStyle(fontWeight: FontWeight.w400),
                 ),
