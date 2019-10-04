@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PhotoCard extends StatefulWidget {
   PhotoCard({Key key, this.photoUrl, this.comment}) : super(key: key);
@@ -9,6 +10,8 @@ class PhotoCard extends StatefulWidget {
 }
 
 class _PhotoCardState extends State<PhotoCard> {
+
+  final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -98,6 +101,14 @@ class _PhotoCardState extends State<PhotoCard> {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text('View Comments'),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            timeago.format(
+             fifteenAgo,
+            ),
+          ),
         )
       ],
     );
