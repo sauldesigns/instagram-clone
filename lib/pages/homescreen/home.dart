@@ -8,21 +8,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  // PageController pageController = Controller(
-  //   initialPage: 0,
-  //   keepPage: true,
-  // );
-
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 5);
-  }
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,61 +31,29 @@ class _HomePageState extends State<HomePage>
           )
         ],
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.transparent,
-          labelPadding: EdgeInsets.only(top: 5, bottom: 25),
-          
-          tabs: <Widget>[
-            Tab(
-              icon: Icon(FontAwesomeIcons.home),
-            ),
-            Tab(
-              icon: Icon(FontAwesomeIcons.search),
-            ),
-            Tab(
-              icon: Icon(FontAwesomeIcons.plusSquare),
-            ),
-            Tab(
-              icon: Icon(FontAwesomeIcons.heart),
-            ),
-            Tab(
-              icon: Icon(FontAwesomeIcons.user),
-            ),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _tabController,
+      body: Column(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.only(bottom: 20.0, ),
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
-                      child: PhotoCard(
-                        comment: 'this is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuff',
-                        photoUrl:
-                            'https://drscdn.500px.org/photo/76092365/m%3D900/v2?sig=a4a238b75ea4a93d3066dde4ee26b6b4b77e21fb404b010a5e689347f56bed28',
-                      ),
-                    );
-                  },
-                ),
+          Expanded(
+            child: ListView.builder(
+              addAutomaticKeepAlives: true,
+              padding: EdgeInsets.only(
+                bottom: 20.0,
               ),
-            ],
+              shrinkWrap: true,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
+                  child: PhotoCard(
+                    comment:
+                        'this is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuff',
+                    photoUrl:
+                        'https://drscdn.500px.org/photo/76092365/m%3D900/v2?sig=a4a238b75ea4a93d3066dde4ee26b6b4b77e21fb404b010a5e689347f56bed28',
+                  ),
+                );
+              },
+            ),
           ),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
         ],
       ),
     );

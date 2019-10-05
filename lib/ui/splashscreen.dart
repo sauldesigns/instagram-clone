@@ -4,7 +4,9 @@ import 'package:simple_animations/simple_animations/controlled_animation.dart';
 
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key key}) : super(key: key);
+  final String title;
+  const SplashScreen({Key key, this.title}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class SplashScreen extends StatelessWidget {
                   return Transform.scale(
                     scale: animation,
                     child: Text(
-                      'Le News',
+                      title,
                       style: TextStyle(
                         fontSize: 45,
                         fontWeight: FontWeight.w500,
