@@ -25,20 +25,14 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     // var _user = Provider.of<FirebaseUser>(context);
     var user = Provider.of<UserRepository>(context);
-    switch (user.status) {
-      case Status.Uninitialized:
-        return SplashScreen(
-          title: 'Instagram',
-        );
-      case Status.Unauthenticated:
-        return LoginPage();
-      case Status.Authenticating:
-        return SplashScreen(
-          title: 'Loading',
-        );
-      case Status.Authenticated:
-        return TabBarViewPage();
+    if (user.status == Status.Authenticated) {
+      return TabBarViewPage();
+    } else if (user.status == Status.Uninitialized) {
+      return SplashScreen(
+        title: 'Instagram',
+      );
+    } else {
+      return LoginPage();
     }
-    return Container();
   }
 }

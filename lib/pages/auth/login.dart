@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email;
   String _password;
   bool showError = false;
+  bool _autoValidate = false;
   bool isLoading = false;
   final FocusNode _emailFocus = new FocusNode();
   final FocusNode _passwordFocus = new FocusNode();
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.all(8.0),
           borderRadius: 10,
           duration: Duration(seconds: 5),
-          message: 'Error! Either password or e-mail are incorrect.',
+          message: 'Either password or e-mail are incorrect.',
           icon: Icon(
             Icons.error,
             color: Colors.red,
@@ -48,11 +49,13 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           showError = true;
           isLoading = false;
+          _autoValidate = true;
         });
       }
     } else {
       setState(() {
         isLoading = false;
+        _autoValidate = true;
       });
     }
   }
@@ -64,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SafeArea(
         child: Form(
-          autovalidate: true,
+          autovalidate: _autoValidate,
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -201,8 +204,8 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(color: Colors.white),
                             )
                           : SpinKitChasingDots(
-                              color: Colors.black,
-                              size: 30,
+                              color: Colors.white,
+                              size: 18,
                             ),
                       Expanded(
                         child: Container(),
