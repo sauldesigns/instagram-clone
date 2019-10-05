@@ -36,9 +36,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: ListView.builder(
               addAutomaticKeepAlives: true,
-              padding: EdgeInsets.only(
-                bottom: 20.0,
-              ),
+              padding: EdgeInsets.only(bottom: 20.0, top: 20.0),
               shrinkWrap: true,
               itemCount: 5,
               itemBuilder: (context, index) {
