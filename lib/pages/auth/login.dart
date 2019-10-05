@@ -1,5 +1,9 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:instagram/services/user_repo.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -9,9 +13,54 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  String _email;
+  String _password;
+  bool showError = false;
+  bool isLoading = false;
+  final FocusNode _emailFocus = new FocusNode();
+  final FocusNode _passwordFocus = new FocusNode();
+
+  void _fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  doSignIn(var userRepo, BuildContext context) async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      bool result = await userRepo.signIn(_email, _password);
+      if (result == true) {
+        print('Success');
+      } else {
+        Flushbar(
+          flushbarPosition: FlushbarPosition.BOTTOM,
+          margin: EdgeInsets.all(8.0),
+          borderRadius: 10,
+          duration: Duration(seconds: 5),
+          message: 'Error! Either password or e-mail are incorrect.',
+          icon: Icon(
+            Icons.error,
+            color: Colors.red,
+          ),
+        )..show(context);
+        setState(() {
+          showError = true;
+          isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var userRepo = Provider.of<UserRepository>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -50,6 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                     child: TextFormField(
+                      focusNode: _emailFocus,
+                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         disabledBorder: InputBorder.none,
@@ -57,11 +108,16 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: 'Phone number, username, email',
                       ),
                       validator: (email) {
-                        if (!EmailValidator.validate(email)) {
-                          return 'Invalid e-mail type';
+                        if (email.isEmpty) {
+                          return 'Please enter email';
+                        } else if (EmailValidator.validate(email) == false) {
+                          return 'Not a valid email';
                         }
                         return null;
                       },
+                      onSaved: (value) => _email = value,
+                      onFieldSubmitted: (term) => _fieldFocusChange(
+                          context, _emailFocus, _passwordFocus),
                     ),
                   ),
                 ),
@@ -78,6 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                     child: TextFormField(
+                      focusNode: _passwordFocus,
+                      textInputAction: TextInputAction.done,
                       autocorrect: false,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -92,6 +150,14 @@ class _LoginPageState extends State<LoginPage> {
                           return 'Password size must be 6 or greater';
                         }
                         return null;
+                      },
+                      onSaved: (value) => _password = value,
+                      onFieldSubmitted: (term) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        _passwordFocus.unfocus();
+                        doSignIn(userRepo, context);
                       },
                     ),
                   ),
@@ -118,8 +184,10 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.lightBlueAccent,
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text('Processing Data')));
+                      setState(() {
+                        isLoading = true;
+                      });
+                      doSignIn(userRepo, context);
                     }
                   },
                   child: Row(
@@ -127,10 +195,15 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Container(),
                       ),
-                      Text(
-                        'Log In',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      isLoading == false
+                          ? Text(
+                              'Log In',
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : SpinKitChasingDots(
+                              color: Colors.black,
+                              size: 30,
+                            ),
                       Expanded(
                         child: Container(),
                       ),

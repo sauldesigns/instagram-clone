@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:instagram/pages/homescreen/home.dart';
+import 'package:instagram/pages/auth/root.dart';
+// import 'package:instagram/pages/homescreen/home.dart';
+import 'package:instagram/services/user_repo.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -9,7 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [],
+      providers: [
+        ChangeNotifierProvider<UserRepository>(
+          builder: (_) => UserRepository.instance(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Instagram',
@@ -17,7 +23,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
           brightness: Brightness.light,
         ),
-        home: HomePage(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => RootPage(),
+        }
       ),
     );
   }
