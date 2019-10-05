@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.grey[100],
         elevation: 1,
@@ -44,27 +45,31 @@ class _HomePageState extends State<HomePage>
           )
         ],
       ),
-      bottomNavigationBar: TabBar(
-        controller: _tabController,
-        indicatorColor: Colors.transparent,
-        labelPadding: EdgeInsets.only(bottom: 25),
-        tabs: <Widget>[
-          Tab(
-            icon: Icon(FontAwesomeIcons.home),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.search),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.plusSquare),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.heart),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.user),
-          ),
-        ],
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.transparent,
+          labelPadding: EdgeInsets.only(top: 5, bottom: 25),
+          
+          tabs: <Widget>[
+            Tab(
+              icon: Icon(FontAwesomeIcons.home),
+            ),
+            Tab(
+              icon: Icon(FontAwesomeIcons.search),
+            ),
+            Tab(
+              icon: Icon(FontAwesomeIcons.plusSquare),
+            ),
+            Tab(
+              icon: Icon(FontAwesomeIcons.heart),
+            ),
+            Tab(
+              icon: Icon(FontAwesomeIcons.user),
+            ),
+          ],
+        ),
       ),
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
@@ -78,10 +83,13 @@ class _HomePageState extends State<HomePage>
                   shrinkWrap: true,
                   itemCount: 5,
                   itemBuilder: (context, index) {
-                    return PhotoCard(
-                      comment: 'this is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuff',
-                      photoUrl:
-                          'https://drscdn.500px.org/photo/76092365/m%3D900/v2?sig=a4a238b75ea4a93d3066dde4ee26b6b4b77e21fb404b010a5e689347f56bed28',
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
+                      child: PhotoCard(
+                        comment: 'this is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuff',
+                        photoUrl:
+                            'https://drscdn.500px.org/photo/76092365/m%3D900/v2?sig=a4a238b75ea4a93d3066dde4ee26b6b4b77e21fb404b010a5e689347f56bed28',
+                      ),
                     );
                   },
                 ),
