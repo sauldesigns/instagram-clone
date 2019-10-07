@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:instagram/pages/homescreen/home.dart';
 import 'package:instagram/pages/homescreen/profile.dart';
+import 'package:instagram/pages/homescreen/upload.dart';
 
 class TabBarViewPage extends StatefulWidget {
  TabBarViewPage({Key key}) : super(key: key);
@@ -60,7 +61,7 @@ class TabBarViewPageState extends State<TabBarViewPage>
         children: [
           HomePage(),
           Container(),
-          Container(),
+          PhotoUploadPage(),
           Container(),
           ProfilePage(),
         ],

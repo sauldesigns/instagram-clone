@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget appBarCustom({List<Widget> actions, String title}) {
   return AppBar(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       elevation: 1,
       centerTitle: true,
       title: Text(

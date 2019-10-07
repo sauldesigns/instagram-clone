@@ -37,8 +37,8 @@ class PhotoCardModel extends ChangeNotifier {
     return;
   }
 
-  Future addProduct(PhotoCardData data) async {
-    await _photoApi.addDocument(data.toJson());
+  Future addProduct(data) async {
+    await _photoApi.addDocument(data);
 
     return;
   }
