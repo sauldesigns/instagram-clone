@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:instagram/models/card.dart';
+import 'package:instagram/services/database.dart';
 import 'package:instagram/ui/photo_card.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -9,8 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<PhotoCardData> photos;
+
   @override
   Widget build(BuildContext context) {
+    final photoProvider = Provider.of<PhotoCardModel>(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -34,23 +41,40 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              addAutomaticKeepAlives: true,
-              padding: EdgeInsets.only(bottom: 20.0, top: 20.0),
-              shrinkWrap: true,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
-                  child: PhotoCard(
-                    comment:
-                        'this is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuffthis is where all this stuff would go, this is where i should be writting stuff',
-                    photoUrl:
-                        'https://drscdn.500px.org/photo/76092365/m%3D900/v2?sig=a4a238b75ea4a93d3066dde4ee26b6b4b77e21fb404b010a5e689347f56bed28',
-                  ),
-                );
-              },
-            ),
+            child: StreamBuilder<QuerySnapshot>(
+                stream: photoProvider.fetchProductsAsStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    photos = snapshot.data.documents
+                        .map((doc) => PhotoCardData.fromFirestore(doc))
+                        .toList();
+                    return ListView.builder(
+                      addAutomaticKeepAlives: true,
+                      padding: EdgeInsets.only(bottom: 20.0, top: 5.0),
+                      shrinkWrap: true,
+                      itemCount: photos.length,
+                      itemBuilder: (context, index) {
+                        if (photos.length == 0) {
+                          return Text('No photos');
+                        } else {
+                          PhotoCardData photo = photos[index];
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 10.0, top: 10.0),
+                            child: PhotoCard(
+                              likes: photo.likes,
+                              comment: photo.description,
+                              photoUrl: photo.photoURL,
+                              createdAt: photo.createdAt,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  } else {
+                    return Text('No data found');
+                  }
+                }),
           ),
         ],
       ),

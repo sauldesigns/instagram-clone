@@ -1,16 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PhotoCard extends StatefulWidget {
-  PhotoCard({Key key, this.photoUrl, this.comment}) : super(key: key);
+  PhotoCard({Key key, this.photoUrl, this.createdAt, this.comment, this.likes})
+      : super(key: key);
   final String photoUrl;
   final String comment;
+  final int likes;
+  final Timestamp createdAt;
   _PhotoCardState createState() => _PhotoCardState();
 }
 
 class _PhotoCardState extends State<PhotoCard> {
   final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
+  final likes = NumberFormat.compact();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +46,8 @@ class _PhotoCardState extends State<PhotoCard> {
               CircleAvatar(
                 radius: 25,
                 backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'),
+                  'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
+                ),
               ),
               SizedBox(
                 width: 10,
@@ -66,10 +75,29 @@ class _PhotoCardState extends State<PhotoCard> {
                 content: Text('Tap'),
               ));
             },
-            child: Image(
+            child: TransitionToImage(
+              image: AdvancedNetworkImage(
+                widget.photoUrl,
+              ),
+              loadingWidgetBuilder: (
+                BuildContext context,
+                double progress,
+                imageData,
+              ) =>
+                  Center(
+                child: CircularProgressIndicator(
+                  value: progress,
+                ),
+              ),
               fit: BoxFit.fitWidth,
-              image: NetworkImage(widget.photoUrl),
+              placeholder: const Icon(Icons.refresh),
+              enableRefresh: true,
             ),
+
+            // child: Image(
+            //   fit: BoxFit.fitWidth,
+            //   image: AdvancedNetworkImage(widget.photoUrl, ),
+            // ),
           ),
           SizedBox(
             height: 15,
@@ -80,24 +108,24 @@ class _PhotoCardState extends State<PhotoCard> {
                 icon: Icon(FontAwesomeIcons.heart),
                 onPressed: () {
                   Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Heart'),
-              ));
+                    content: Text('Heart'),
+                  ));
                 },
               ),
               IconButton(
                 icon: Icon(FontAwesomeIcons.comment),
                 onPressed: () {
                   Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Comment'),
-              ));
+                    content: Text('Comment'),
+                  ));
                 },
               ),
               IconButton(
                 icon: Icon(FontAwesomeIcons.paperPlane),
                 onPressed: () {
                   Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Share'),
-              ));
+                    content: Text('Share'),
+                  ));
                 },
               ),
               Expanded(
@@ -107,8 +135,8 @@ class _PhotoCardState extends State<PhotoCard> {
                 icon: Icon(FontAwesomeIcons.bookmark),
                 onPressed: () {
                   Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Bookmark'),
-              ));
+                    content: Text('Bookmark'),
+                  ));
                 },
               ),
             ],
@@ -116,7 +144,7 @@ class _PhotoCardState extends State<PhotoCard> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              '23,432 likes',
+              likes.format(widget.likes) + ' likes',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -127,10 +155,20 @@ class _PhotoCardState extends State<PhotoCard> {
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 10.0, left: 10.0, bottom: 10.0, right: 5.0),
-                  child: Text(
-                    "SaulDesigns  " + widget.comment,
-                    softWrap: true,
-                    style: TextStyle(fontWeight: FontWeight.w400),
+                  child: RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Saul Designs',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '\t\t${widget.comment}',
+                          ),
+                        ]),
                   ),
                 ),
               ),
@@ -143,12 +181,12 @@ class _PhotoCardState extends State<PhotoCard> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              timeago.format(
-                fifteenAgo,
-              ),
+              timeago.format(widget.createdAt.toDate()),
             ),
           ),
-          SizedBox(height: 10.0,)
+          SizedBox(
+            height: 10.0,
+          )
         ],
       ),
     );
