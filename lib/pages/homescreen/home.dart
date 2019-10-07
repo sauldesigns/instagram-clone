@@ -26,7 +26,11 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(
           'Instagram',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'Billabong',
+            fontSize: 35,
+          ),
         ),
         actions: <Widget>[
           Padding(

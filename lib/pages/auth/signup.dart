@@ -31,12 +31,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 'Instagram',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 35,
-                ),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 80,
+                    fontFamily: 'Billabong'),
               ),
               SizedBox(
-                height: 10,
+                height: 50,
               ),
               Padding(
                 padding: const EdgeInsets.only(
