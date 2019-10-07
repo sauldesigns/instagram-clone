@@ -59,7 +59,12 @@ class _HomePageState extends State<HomePage> {
                       itemCount: photos.length,
                       itemBuilder: (context, index) {
                         if (photos.length == 0) {
-                          return Text('No photos');
+                          return Center(
+                            child: Text(
+                              'No data found',
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          );
                         } else {
                           PhotoCardData photo = photos[index];
                           return Padding(
@@ -76,7 +81,12 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   } else {
-                    return Text('No data found');
+                    return Center(
+                      child: Text(
+                        'No data found',
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    );
                   }
                 }),
           ),
