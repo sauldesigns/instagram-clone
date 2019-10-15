@@ -69,152 +69,157 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           autovalidate: _autoValidate,
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Text(
+                    'Instagram',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 80,
+                        fontFamily: 'Billabong'),
                   ),
-                ],
-              ),
-              Text(
-                'Instagram',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 80,
-                    fontFamily: 'Billabong'),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, top: 40.0, bottom: 20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(width: 0.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: TextFormField(
-                      focusNode: _emailFocus,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        disabledBorder: InputBorder.none,
-                        border: InputBorder.none,
-                        hintText: 'Phone number, username, email',
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, right: 20.0, top: 20.0, bottom: 20.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(width: 0.5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: TextFormField(
+                        focusNode: _emailFocus,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          disabledBorder: InputBorder.none,
+                          border: InputBorder.none,
+                          hintText: 'Phone number, username, email',
+                        ),
+                        validator: (email) {
+                          if (email.isEmpty) {
+                            return 'Please enter email';
+                          } else if (EmailValidator.validate(email) == false) {
+                            return 'Not a valid email';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _email = value,
+                        onFieldSubmitted: (term) => _fieldFocusChange(
+                            context, _emailFocus, _passwordFocus),
                       ),
-                      validator: (email) {
-                        if (email.isEmpty) {
-                          return 'Please enter email';
-                        } else if (EmailValidator.validate(email) == false) {
-                          return 'Not a valid email';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) => _email = value,
-                      onFieldSubmitted: (term) => _fieldFocusChange(
-                          context, _emailFocus, _passwordFocus),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, top: 0, bottom: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(width: 0.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: TextFormField(
-                      focusNode: _passwordFocus,
-                      textInputAction: TextInputAction.done,
-                      autocorrect: false,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        disabledBorder: InputBorder.none,
-                        border: InputBorder.none,
-                        hintText: 'Password',
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, right: 20.0, top: 0, bottom: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(width: 0.5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: TextFormField(
+                        focusNode: _passwordFocus,
+                        textInputAction: TextInputAction.done,
+                        autocorrect: false,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          disabledBorder: InputBorder.none,
+                          border: InputBorder.none,
+                          hintText: 'Password',
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a password';
+                          } else if (value.length < 6) {
+                            return 'Password size must be 6 or greater';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _password = value,
+                        onFieldSubmitted: (term) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          _passwordFocus.unfocus();
+                          doSignIn(userRepo, context);
+                        },
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter a password';
-                        } else if (value.length < 6) {
-                          return 'Password size must be 6 or greater';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) => _password = value,
-                      onFieldSubmitted: (term) {
+                    ),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: Container()),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 7.0, bottom: 10.0),
+                      child: FlatButton(
+                        onPressed: () {},
+                        child: Text('Forgot password?'),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: FlatButton(
+                    padding: EdgeInsets.only(top: 15, bottom: 15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    color: Colors.lightBlueAccent,
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
                         setState(() {
                           isLoading = true;
                         });
-                        _passwordFocus.unfocus();
                         doSignIn(userRepo, context);
-                      },
+                      }
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(),
+                        ),
+                        isLoading == false
+                            ? Text(
+                                'Log In',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : SpinKitChasingDots(
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(child: Container()),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 7.0, bottom: 10.0),
-                    child: FlatButton(
-                      onPressed: () {},
-                      child: Text('Forgot password?'),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                child: FlatButton(
-                  padding: EdgeInsets.only(top: 15, bottom: 15),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  color: Colors.lightBlueAccent,
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      doSignIn(userRepo, context);
-                    }
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(),
-                      ),
-                      isLoading == false
-                          ? Text(
-                              'Log In',
-                              style: TextStyle(color: Colors.white),
-                            )
-                          : SpinKitChasingDots(
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
