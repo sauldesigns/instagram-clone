@@ -20,6 +20,13 @@ The application was built with the idea of creating a clone of the modern Instag
   - Once image is selected, the user will be routed to the page that lets them add a caption to the image. 
   - Once the user clicks Share the photo will upload to the database and be displayed on the homescreen/timline. 
 
+### Pages Implemented
+  - [x] Homepage
+  - [x] Photo Upload
+  - [ ] Search/Explore
+  - [ ] Activity/Likes
+  - [ ] User Profile
+
 ### Database & Authenthication
   - Powered By Firestore Database (Firebase)
 
