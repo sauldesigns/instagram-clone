@@ -20,9 +20,9 @@ class PhotoCardData {
     } else {
       return PhotoCardData(
         uid: photoDoc.documentID,
-        description: photoData['description'],
+        description: photoData['description'] ?? '',
         photoURL: photoData['photoUrl'] ?? 'https://bit.ly/336eLGv',
-        likes: photoData['likes'],
+        likes: photoData['likes'] ?? 0,
         createdAt: photoData['createdAt'],
       );
     }
