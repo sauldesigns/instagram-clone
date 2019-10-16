@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:instagram/services/database.dart';
 import 'package:instagram/ui/appbar.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,16 @@ class _PhotoEditPageState extends State<PhotoEditPage> {
               ),
             ),
             onPressed: () async {
+              showDialog(
+                context: context,
+                builder: (_) => SpinKitChasingDots(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              );
+
               await uploadPhoto(widget.image, caption, user, photoProvider);
+              Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
           )

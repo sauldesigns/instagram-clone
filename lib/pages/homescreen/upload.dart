@@ -26,6 +26,7 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
       appBar: appBarCustom(title: 'Upload'),
       body: Center(
         child: RaisedButton(
+          color: Colors.white,
           child: Text('Upload'),
           onPressed: () async {
             _image = await getImage();
