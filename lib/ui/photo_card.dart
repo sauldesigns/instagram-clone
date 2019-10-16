@@ -59,6 +59,14 @@ class _PhotoCardState extends State<PhotoCard> {
               Expanded(
                 child: Container(),
               ),
+              FlatButton(
+                splashColor: Colors.transparent,
+                child: Text(
+                  '...',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () {},
+              )
             ],
           ),
           SizedBox(
@@ -84,13 +92,26 @@ class _PhotoCardState extends State<PhotoCard> {
                 double progress,
                 imageData,
               ) =>
-                  Center(
-                child: CircularProgressIndicator(
-                  value: progress,
+                  Container(
+                width: double.infinity,
+                height: 300,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    value: progress,
+                  ),
                 ),
               ),
               fit: BoxFit.fitWidth,
-              placeholder: const Icon(Icons.refresh),
+              placeholder: Container(
+                width: double.infinity,
+                height: 300,
+                child: Center(
+                  child: const Icon(
+                    Icons.refresh,
+                    size: 40,
+                  ),
+                ),
+              ),
               enableRefresh: true,
             ),
 
